@@ -33,9 +33,11 @@ static BOOL FunctionScanPort(char* ip, int port)
 
 	// thiết lập địa chỉ kết nối
 	clientService.sin_family = AF_INET;
+	// gán địa chỉ ip cho kết nối
 	clientService.sin_addr.s_addr = inet_addr(ip);
 	// tạo socket
 	sock = INVALID_SOCKET;
+	// tạo socket với giao thức tcp được khởi tạo sẵn với tên biến là IPPROTO_TCP
 	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock == INVALID_SOCKET)
 	{
@@ -43,8 +45,10 @@ static BOOL FunctionScanPort(char* ip, int port)
 		closesocket(sock);
 		return FALSE;
 	}
+	// gán port cho kết nối
 	clientService.sin_port = htons(port);
 	connect_status = connect(sock, (SOCKADDR*)&clientService, sizeof(clientService));
+	// Mặc định nếu connect thành công connect_status sẽ trả về 0, nếu có lỗi nó sẽ trả về SOCKET_ERROR và có thể truy xuất bằng WSAGetLastError.
 	if (connect_status != SOCKET_ERROR)
 	{
 		cout << port << " : OPEN : ";
